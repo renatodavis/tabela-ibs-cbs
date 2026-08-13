@@ -6,37 +6,27 @@ Obrigado pelo interesse! Este repositório existe para ser um bem público — q
 
 ## O que mais precisa de ajuda agora
 
-### 1. Grupos CST pendentes
+### 1. Manter o dataset atualizado
 
-Os grupos a seguir ainda não têm registros no dataset:
+O CGIBS pode publicar novas resoluções adicionando ou alterando códigos a qualquer momento. Se você acompanha o Diário Oficial ou o portal SVRS, abra uma issue quando detectar uma mudança.
 
-| Grupo | Descrição |
-|-------|-----------|
-| **620** | Tributação monofásica — combustíveis e biocombustíveis |
-| **800** | Transferência de crédito |
-| **810** | Estorno de crédito |
-| **811** | Estorno de crédito — variantes |
-| **820** | Ajuste de débito |
-| **830** | Ajuste de crédito |
+**Onde verificar:** Portal SVRS — https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria
 
-**Onde encontrar:** Portal SVRS — https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria  
-Filtrar pelo CST desejado e exportar. Os campos que precisamos: Código (6 dígitos), CST (3 dígitos), Descrição.
-
-### 2. Grupo 550 incompleto
-
-O grupo 550 (Suspensão) tem mais registros além dos 2 já cadastrados. Verificar e completar.
-
-### 3. Correção de descrições
+### 2. Correção de descrições
 
 Se você encontrar uma descrição errada ou desatualizada em relação à resolução do CGIBS vigente, abra uma issue ou PR com a correção e o link da resolução.
 
-### 4. Atualização pós-resolução CGIBS
+### 3. Tradução das descrições
 
-O CGIBS pode publicar novas resoluções adicionando ou alterando códigos. Se você acompanha o Diário Oficial, abra uma issue quando detectar uma mudança.
+Algumas descrições estão como transcrição literal do texto legal — pode ser útil manter um campo `descricao_resumida` mais amigável. Se quiser propor isso, abra uma issue primeiro para discutir o formato.
+
+### 4. Melhorias na interface web
+
+O `index.html` e o `learn.html` são autocontidos (sem dependências externas) para poder ser abertos diretamente do sistema de arquivos. Contribuições à UX são bem-vindas — mantenha essa característica.
 
 ---
 
-## Como adicionar um registro
+## Como adicionar ou corrigir um registro
 
 Edite o arquivo `data/cclassTrib.json`. O formato de cada entrada é:
 
@@ -49,24 +39,24 @@ Regras:
 - **`cst`**: 3 dígitos, apenas o grupo
 - **`descricao`**: copie da fonte oficial; não parafraseie
 - Mantenha a ordem: agrupe por CST, dentro de cada grupo em ordem crescente de código
-- Atualize o campo `meta.total_registros` após adicionar registros
+- Atualize o campo `meta.total_registros` e `meta.atualizado_em` após adicionar registros
 
 Se for adicionar um grupo CST novo que ainda não existe em `grupos_cst`, adicione também sua entrada no array, com:
 
 ```json
-{ "codigo": "620", "descricao": "Tributação monofásica — combustíveis e biocombustíveis", "cor": "#4f46e5" }
+{ "codigo": "999", "descricao": "Descrição do grupo", "cor": "#4f46e5" }
 ```
 
 ---
 
 ## Fluxo de Pull Request
 
-1. Fork → crie branch com nome descritivo (`add-cst-620`, `fix-cst-200012`, etc.)
+1. Fork → crie branch com nome descritivo (`add-cst-620`, `fix-cst-200012`, `update-cst-200-resolucao-42`, etc.)
 2. Edite `data/cclassTrib.json`
 3. Atualize `meta.atualizado_em` com a data atual (formato `AAAA-MM-DD`)
 4. Inclua na descrição do PR:
    - Fonte consultada (URL + data de acesso)
-   - Trecho ou número da resolução CGIBS, se aplicável
+   - Número da resolução CGIBS, se aplicável
 5. Abra o PR
 
 ---
@@ -84,20 +74,14 @@ PRs que alteram dados sem citar fonte serão solicitados a complementar antes do
 ## Issues
 
 Abra uma issue se:
-- Encontrou um código errado
-- O CGIBS publicou uma resolução com códigos novos
-- Tem dúvida sobre a classificação de alguma operação (para compartilhar com a comunidade, não para obter assessoria jurídica)
-
----
-
-## Código da aplicação web (`index.html`)
-
-Contribuições à interface também são bem-vindas. O arquivo é intencionalmente autocontido (sem dependências externas) para poder ser aberto diretamente do sistema de arquivos. Mantenha essa característica.
+- O CGIBS publicou uma resolução com códigos novos ou alterados
+- Encontrou um código errado ou descrição desatualizada
+- Quer propor melhoria de formato ou estrutura do JSON
 
 ---
 
 ## Não é escopo deste projeto
 
-- Consultor de classificação (qual cClassTrib usar para meu produto): use um contador
+- Consultor de classificação (qual cClassTrib usar para meu produto): use o guia interativo `learn.html` ou consulte um contador
 - API com autenticação, banco de dados ou SaaS: fork e construa o seu
 - Dados de ICMS/ISS legados: este projeto cobre apenas IBS/CBS (reforma tributária LC 214/2025)
