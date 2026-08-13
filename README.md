@@ -6,7 +6,7 @@
 
 [![Licença: CC0](https://img.shields.io/badge/licen%C3%A7a-CC0%201.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/deed.pt)
 [![Dados: SVRS/SEFAZ](https://img.shields.io/badge/fonte-SVRS%2FSEFAZ-blue)](https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria)
-[![Status](https://img.shields.io/badge/status-parcial%20(118%2F200%2B%20registros)-orange)](#status-dos-dados)
+[![Status](https://img.shields.io/badge/status-completo%20(164%20registros)-brightgreen)](#status-dos-dados)
 
 ---
 
@@ -36,15 +36,17 @@ Abra o arquivo `index.html` diretamente no browser. Ele carrega os dados localme
 
 Se preferir uma versão hospedada: `https://renatodavis.github.io/tabela-ibs-cbs`
 
+Há também um **guia interativo** de tributação em `learn.html` (ou `/guia`): responda 2–3 perguntas sobre seu negócio e descubra qual CST/cClassTrib se aplica, com explicações didáticas.
+
 ### Como dado (JSON)
 
 ```json
 // data/cclassTrib.json — estrutura
 {
   "meta": {
-    "versao": "1.0.0",
-    "atualizado_em": "2026-08-12",
-    "total_registros": 118
+    "versao": "1.1.0",
+    "atualizado_em": "2026-08-13",
+    "total_registros": 164
   },
   "grupos_cst": [
     { "codigo": "000", "descricao": "Tributação integral pelo IBS e CBS", "cor": "#2563eb" }
@@ -89,13 +91,17 @@ const codigo = tabela.cclassTrib.find(r => r.codigo === '200003');
 | 410 | Imunidade / Não-incidência | 38 | ✅ Completo |
 | 510 | Diferimento — energia elétrica | 1 | ✅ Completo |
 | 515 | Diferimento — insumos agropecuários | 1 | ✅ Completo |
-| 550 | Suspensão | 2 | ⚠️ Parcial |
-| 620 | Tributação monofásica — combustíveis | 0 | ❌ Pendente |
-| 800–830 | Transferências e ajustes | 0 | ❌ Pendente |
+| 550 | Suspensão | 25 | ✅ Completo |
+| 620 | Tributação monofásica — combustíveis | 7 | ✅ Completo |
+| 800 | Transferência de crédito | 2 | ✅ Completo |
+| 810 | Crédito presumido | 1 | ✅ Completo |
+| 811 | Estorno e ajustes de crédito | 3 | ✅ Completo |
+| 820 | Ajuste de débito | 9 | ✅ Completo |
+| 830 | Ajuste de crédito | 1 | ✅ Completo |
 
-**Total atual: 118 de ~200+ registros**
+**Total: 164 registros — todos os grupos CST cobertos** ✅
 
-Veja como contribuir com os grupos faltantes em [CONTRIBUTING.md](CONTRIBUTING.md).
+Veja como contribuir (manter atualizado conforme novas resoluções do CGIBS) em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

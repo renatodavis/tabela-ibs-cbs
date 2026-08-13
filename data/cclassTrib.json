@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versao": "1.0.0",
+    "versao": "1.1.0",
     "titulo": "Tabela de Código de Classificação Tributária do IBS e da CBS (cClassTrib)",
     "descricao": "Tabela aberta dos códigos cClassTrib para uso em NF-e, NFC-e e demais DFe, conforme a LC 214/2025 e a NT NF-e 2025.002. Mantida pela comunidade.",
     "fontes": [
@@ -9,10 +9,10 @@
       "LC 214/2025 (https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm)",
       "NT NF-e 2025.002 (portal SVRS)"
     ],
-    "atualizado_em": "2026-08-12",
-    "status": "parcial — contribua via Pull Request no GitHub",
-    "total_registros": 118,
-    "nota": "Registros dos grupos CST 620, 800, 810, 811, 820, 830 e parte do 550 ainda precisam ser adicionados. Veja CONTRIBUTING.md."
+    "atualizado_em": "2026-08-13",
+    "status": "completo — 164 registros cobrindo todos os grupos CST",
+    "total_registros": 164,
+    "nota": "Tabela completa conforme publicação oficial do CGIBS e portal DFe SVRS (ago/2026). Para atualizações, acompanhe resoluções do Comitê Gestor do IBS."
   },
   "grupos_cst": [
     { "codigo": "000", "descricao": "Tributação integral pelo IBS e CBS", "cor": "#2563eb" },
@@ -26,9 +26,13 @@
     { "codigo": "410", "descricao": "Imunidade / Não-incidência — exportações, entidades, descontos, PF", "cor": "#dc2626" },
     { "codigo": "510", "descricao": "Diferimento — energia elétrica", "cor": "#ca8a04" },
     { "codigo": "515", "descricao": "Diferimento com redução de alíquota — insumos agropecuários e aquícolas", "cor": "#a16207" },
-    { "codigo": "550", "descricao": "Suspensão — exportações de bens materiais, trânsito aduaneiro e outros", "cor": "#b45309" },
-    { "codigo": "620", "descricao": "Tributação monofásica — combustíveis e biocombustíveis", "cor": "#4f46e5" },
-    { "codigo": "800", "descricao": "Transferência de crédito e ajustes fiscais", "cor": "#6b7280" }
+    { "codigo": "550", "descricao": "Suspensão — exportações de bens materiais, trânsito aduaneiro, Repetro, ZFM e outros", "cor": "#b45309" },
+    { "codigo": "620", "descricao": "Tributação monofásica — combustíveis e biocombustíveis", "cor": "#6d28d9" },
+    { "codigo": "800", "descricao": "Transferência de crédito — fusão, cisão, incorporação e cooperativas", "cor": "#1e40af" },
+    { "codigo": "810", "descricao": "Ajuste de IBS na ZFM — crédito presumido sobre fornecimentos a partir da ZFM", "cor": "#1d4ed8" },
+    { "codigo": "811", "descricao": "Ajustes — anulação de crédito, débitos não processados, desenquadramento", "cor": "#1e3a8a" },
+    { "codigo": "820", "descricao": "Tributação em documento específico — planos de saúde, funerária, imóveis, serviços continuados", "cor": "#9d174d" },
+    { "codigo": "830", "descricao": "Exclusão de base de cálculo — energia elétrica fornecida pela distribuidora", "cor": "#4c1d95" }
   ],
   "cclassTrib": [
     { "codigo": "000001", "cst": "000", "descricao": "Situações tributadas integralmente pelo IBS e CBS" },
@@ -148,6 +152,52 @@
     { "codigo": "510001", "cst": "510", "descricao": "Operações, sujeitas a diferimento, com energia elétrica relativas à importação, geração, comercialização, distribuição e transmissão" },
     { "codigo": "515001", "cst": "515", "descricao": "Operações, sujeitas a diferimento, com insumos agropecuários e aquícolas (Anexo IX)" },
     { "codigo": "550001", "cst": "550", "descricao": "Exportações de bens materiais" },
-    { "codigo": "550002", "cst": "550", "descricao": "Regime de Trânsito Aduaneiro" }
+    { "codigo": "550002", "cst": "550", "descricao": "Regime de Trânsito Aduaneiro" },
+    { "codigo": "550003", "cst": "550", "descricao": "Regimes de Depósito (art. 85)" },
+    { "codigo": "550004", "cst": "550", "descricao": "Regimes de Depósito (art. 87)" },
+    { "codigo": "550005", "cst": "550", "descricao": "Regimes de Depósito (art. 87, Parágrafo único)" },
+    { "codigo": "550006", "cst": "550", "descricao": "Regimes de Permanência Temporária" },
+    { "codigo": "550007", "cst": "550", "descricao": "Regimes de Aperfeiçoamento" },
+    { "codigo": "550008", "cst": "550", "descricao": "Importação de bens para o Regime de Repetro-Temporário" },
+    { "codigo": "550009", "cst": "550", "descricao": "GNL-Temporário" },
+    { "codigo": "550010", "cst": "550", "descricao": "Repetro-Permanente" },
+    { "codigo": "550011", "cst": "550", "descricao": "Repetro-Industrialização" },
+    { "codigo": "550012", "cst": "550", "descricao": "Repetro-Nacional" },
+    { "codigo": "550013", "cst": "550", "descricao": "Repetro-Entreposto" },
+    { "codigo": "550014", "cst": "550", "descricao": "Zona de Processamento de Exportação" },
+    { "codigo": "550015", "cst": "550", "descricao": "Regime Tributário para Incentivo à Modernização e à Ampliação da Estrutura Portuária" },
+    { "codigo": "550016", "cst": "550", "descricao": "Regime Especial de Incentivos para o Desenvolvimento da Infraestrutura" },
+    { "codigo": "550017", "cst": "550", "descricao": "Regime Tributário para Incentivo à Atividade Naval — Renaval (Art. 107, I)" },
+    { "codigo": "550018", "cst": "550", "descricao": "Desoneração da aquisição de bens de capital" },
+    { "codigo": "550019", "cst": "550", "descricao": "Importação de bem material por indústria incentivada para utilização na ZFM" },
+    { "codigo": "550020", "cst": "550", "descricao": "Áreas de livre comércio" },
+    { "codigo": "550021", "cst": "550", "descricao": "Industrialização destinada a exportações" },
+    { "codigo": "550022", "cst": "550", "descricao": "Regime Especial de Incentivos para a Produção de Hidrogênio de Baixa Emissão de Carbono (Rehidro)" },
+    { "codigo": "550023", "cst": "550", "descricao": "Operações com hidrocarbonetos líquidos derivados de petróleo não combustíveis ou de gás natural, inclusive nafta" },
+    { "codigo": "550024", "cst": "550", "descricao": "Regime Tributário para Incentivo à Atividade Naval — Renaval (Art. 107, II)" },
+    { "codigo": "550025", "cst": "550", "descricao": "Regime Tributário para Incentivo à Atividade Naval — Renaval (Art. 107, III)" },
+    { "codigo": "620001", "cst": "620", "descricao": "Tributação monofásica sobre combustíveis" },
+    { "codigo": "620002", "cst": "620", "descricao": "Tributação monofásica com responsabilidade pela retenção sobre combustíveis" },
+    { "codigo": "620003", "cst": "620", "descricao": "Tributação monofásica com responsabilidade de retenção de tributos por terceiros" },
+    { "codigo": "620004", "cst": "620", "descricao": "Tributação monofásica sobre mistura de EAC com gasolina A em percentual superior ao obrigatório" },
+    { "codigo": "620005", "cst": "620", "descricao": "Tributação monofásica sobre mistura de EAC com gasolina A em percentual inferior ao obrigatório" },
+    { "codigo": "620006", "cst": "620", "descricao": "Tributação monofásica sobre combustíveis cobrada anteriormente" },
+    { "codigo": "620007", "cst": "620", "descricao": "Perecimento, deterioração, roubo, furto ou extravio no regime monofásico" },
+    { "codigo": "800001", "cst": "800", "descricao": "Fusão, cisão ou incorporação" },
+    { "codigo": "800002", "cst": "800", "descricao": "Transferência de crédito do associado, inclusive as cooperativas singulares" },
+    { "codigo": "810001", "cst": "810", "descricao": "Crédito presumido de IBS sobre o valor apurado nos fornecimentos a partir da ZFM" },
+    { "codigo": "811001", "cst": "811", "descricao": "Anulação de crédito por saídas imunes ou isentas" },
+    { "codigo": "811002", "cst": "811", "descricao": "Débitos de notas fiscais não processadas na apuração" },
+    { "codigo": "811003", "cst": "811", "descricao": "Desenquadramento do Simples Nacional" },
+    { "codigo": "820001", "cst": "820", "descricao": "Documento com informações de fornecimento de serviços de planos de assistência à saúde elencados no art. 234 da Lei Complementar nº 214, de 2025" },
+    { "codigo": "820002", "cst": "820", "descricao": "Documento com informações de fornecimento de serviços de planos de assistência funerária" },
+    { "codigo": "820003", "cst": "820", "descricao": "Documento com informações de fornecimento de serviços de planos de assistência à saúde de animais domésticos" },
+    { "codigo": "820004", "cst": "820", "descricao": "Documento com informações de prestação de serviços de concursos de prognósticos" },
+    { "codigo": "820005", "cst": "820", "descricao": "Documento com informações de alienação de bens imóveis" },
+    { "codigo": "820006", "cst": "820", "descricao": "Documento com informações de fornecimento de serviços de exploração de via" },
+    { "codigo": "820007", "cst": "820", "descricao": "Documento com informações de fornecimento de serviços financeiros" },
+    { "codigo": "820008", "cst": "820", "descricao": "Documento com informações de fornecimento de serviço continuado, mas com tributação realizada em fatura anterior" },
+    { "codigo": "820009", "cst": "820", "descricao": "Cobrança relativa a fornecimentos declarados em outro documento" },
+    { "codigo": "830001", "cst": "830", "descricao": "Documento com exclusão da base de cálculo da CBS e do IBS de energia elétrica fornecida pela distribuidora à unidade consumidora" }
   ]
 }
