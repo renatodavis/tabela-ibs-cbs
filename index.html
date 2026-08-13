@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cClassTrib IBS/CBS — Tabela Aberta</title>
+  <meta name="description" content="Tabela aberta e pesquisável dos códigos cClassTrib para IBS e CBS. Baseada na LC 214/2025 e NT NF-e 2025.002. Mantida pela comunidade.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #1d4ed8;
+      --accent-light: #eff6ff;
+      --highlight: #fef08a;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a; --surface: #1e293b; --border: #334155;
+        --text: #f1f5f9; --text-muted: #94a3b8;
+        --accent-light: #1e3a5f; --highlight: #713f12;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text);
+      font-size: 14px; line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px 16px;
+    }
+    .header-top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    h1 { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 2px 8px;
+      border-radius: 99px; background: #dcfce7; color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .badge.parcial { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
+    .subtitle { color: var(--text-muted); margin-top: 4px; font-size: 13px; }
+    .header-meta {
+      display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .header-meta a { color: var(--accent); text-decoration: none; }
+    .header-meta a:hover { text-decoration: underline; }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 12px 24px; display: flex; gap: 10px; flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+    input[type="search"] {
+      width: 100%; padding: 8px 12px 8px 34px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg); color: var(--text);
+      font-size: 14px; outline: none;
+    }
+    input[type="search"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,78,216,.15); }
+
+    select {
+      padding: 8px 32px 8px 12px; border: 1px solid var(--border);
+      border-radius: var(--radius); background: var(--bg);
+      color: var(--text); font-size: 13px; cursor: pointer;
+      appearance: none; outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    select:focus { border-color: var(--accent); }
+
+    .btn {
+      padding: 8px 14px; border-radius: var(--radius); font-size: 13px;
+      font-weight: 500; cursor: pointer; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text);
+      display: flex; align-items: center; gap: 6px; white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--bg); }
+    .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn.primary:hover { background: #1e40af; }
+
+    /* ── Stats bar ── */
+    .stats {
+      padding: 8px 24px; font-size: 12px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 16px;
+    }
+    #count { font-weight: 600; color: var(--text); }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; padding: 0 24px 24px; }
+    table {
+      width: 100%; border-collapse: collapse;
+      background: var(--surface); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    thead { background: var(--bg); }
+    th {
+      text-align: left; padding: 10px 14px;
+      font-size: 11px; font-weight: 600; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 14px; border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--accent-light); }
+
+    .code-cell {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px; font-weight: 600; letter-spacing: .03em;
+      white-space: nowrap;
+    }
+    .cst-pill {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 99px; font-size: 11px; font-weight: 600;
+      color: #fff; white-space: nowrap;
+    }
+    .desc-cell { max-width: 520px; }
+    mark { background: var(--highlight); border-radius: 2px; padding: 0 1px; }
+
+    .copy-btn {
+      padding: 4px 8px; border-radius: 5px; font-size: 11px;
+      cursor: pointer; border: 1px solid var(--border);
+      background: var(--bg); color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .copy-btn:hover { color: var(--text); }
+    .copy-btn.copied { color: #16a34a; border-color: #86efac; }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center; padding: 48px 24px;
+      color: var(--text-muted);
+    }
+    .empty strong { display: block; font-size: 16px; margin-bottom: 6px; color: var(--text); }
+
+    /* ── Footer ── */
+    footer {
+      margin: 0 24px 32px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 12px; color: var(--text-muted);
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      justify-content: space-between;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .incomplete-warning {
+      background: #fef9c3; border: 1px solid #fde68a;
+      color: #854d0e; padding: 10px 14px; border-radius: var(--radius);
+      font-size: 12px; margin: 0 24px 12px;
+    }
+
+    @media (max-width: 640px) {
+      header, .toolbar, .table-wrap, footer, .incomplete-warning { padding-left: 16px; padding-right: 16px; }
+      .table-wrap { padding: 0 0 24px; }
+      th:nth-child(3), td:nth-child(3) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>cClassTrib IBS/CBS</h1>
+    <span class="badge parcial">118 registros · parcial</span>
+  </div>
+  <p class="subtitle">Tabela aberta dos códigos de classificação tributária para NF-e/NFC-e. Baseada na LC&nbsp;214/2025 e NT&nbsp;NF-e&nbsp;2025.002.</p>
+  <div class="header-meta">
+    <span>📋 Fonte oficial: <a href="https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria" target="_blank" rel="noopener">Portal SVRS</a></span>
+    <span>📖 <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank" rel="noopener">LC 214/2025</a></span>
+    <span>🤝 <a href="https://github.com/renatodavis/tabela-ibs-cbs" target="_blank" rel="noopener">Contribuir no GitHub</a></span>
+    <span id="atualizado">Atualizado: 2026-08-12</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="search" id="q" placeholder="Buscar por código ou descrição… ex: medicamento, exportação, 200009" autofocus>
+  </div>
+
+  <select id="cst-filter">
+    <option value="">Todos os CST</option>
+  </select>
+
+  <button class="btn" id="csv-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Baixar CSV
+  </button>
+
+  <a class="btn" href="data/cclassTrib.json" download>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    JSON
+  </a>
+</div>
+
+<div class="stats">
+  <span>Exibindo <strong id="count">—</strong> registros</span>
+</div>
+
+<div class="incomplete-warning">
+  ⚠️ Esta tabela é <strong>parcial</strong> — grupos CST 620 (monofásico), 800–830 (ajustes) e parte do 550 ainda precisam ser adicionados.
+  <a href="https://github.com/renatodavis/tabela-ibs-cbs/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Como contribuir →</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Grupo CST</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty" style="display:none">
+    <strong>Nenhum resultado</strong>
+    Tente termos como "medicamento", "410004", "exportação" ou "alimentação".
+  </div>
+</div>
+
+<footer>
+  <span>Dados coletados do <a href="https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria" target="_blank">Portal DFe SVRS</a> e da <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank">LC 214/2025</a>. Tabela mantida pela comunidade — não é fonte oficial.</span>
+  <a href="https://github.com/renatodavis/tabela-ibs-cbs" target="_blank" rel="noopener" class="btn">⭐ GitHub</a>
+</footer>
+
+<script>
+// ── Dados embutidos — funciona offline (file://) e via GitHub Pages ──
+// Para atualizar: edite data/cclassTrib.json e atualize este bloco.
+const INLINE_DATA = {"meta":{"versao":"1.0.0","titulo":"Tabela de Código de Classificação Tributária do IBS e da CBS (cClassTrib)","descricao":"Tabela aberta dos códigos cClassTrib para uso em NF-e, NFC-e e demais DFe, conforme a LC 214/2025 e a NT NF-e 2025.002. Mantida pela comunidade.","fontes":["https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria","https://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=%2FNJarYc9nus%3D","LC 214/2025 (https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm)","NT NF-e 2025.002 (portal SVRS)"],"atualizado_em":"2026-08-12","status":"parcial — contribua via Pull Request no GitHub","total_registros":118,"nota":"Registros dos grupos CST 620, 800, 810, 811, 820, 830 e parte do 550 ainda precisam ser adicionados. Veja CONTRIBUTING.md."},"grupos_cst":[{"codigo":"000","descricao":"Tributação integral pelo IBS e CBS","cor":"#2563eb"},{"codigo":"010","descricao":"Tributação com alíquotas uniformes — setor financeiro (FGTS, serviços financeiros)","cor":"#7c3aed"},{"codigo":"011","descricao":"Tributação com alíquotas uniformes reduzidas — saúde, funerária, concursos","cor":"#9333ea"},{"codigo":"200","descricao":"Alíquota reduzida — saúde, educação, agro, imóveis, cultura e outros","cor":"#16a34a"},{"codigo":"220","descricao":"Alíquota fixa — regime imobiliário especial (RET) e parcelamento do solo","cor":"#0891b2"},{"codigo":"221","descricao":"Alíquota proporcional fixa sobre receita bruta — locação e RET","cor":"#0e7490"},{"codigo":"222","descricao":"Redução de base de cálculo — transporte internacional","cor":"#0f766e"},{"codigo":"400","descricao":"Isenção — transporte público rodoviário e metroviário","cor":"#d97706"},{"codigo":"410","descricao":"Imunidade / Não-incidência — exportações, entidades, descontos, PF","cor":"#dc2626"},{"codigo":"510","descricao":"Diferimento — energia elétrica","cor":"#ca8a04"},{"codigo":"515","descricao":"Diferimento com redução de alíquota — insumos agropecuários e aquícolas","cor":"#a16207"},{"codigo":"550","descricao":"Suspensão — exportações de bens materiais, trânsito aduaneiro e outros","cor":"#b45309"},{"codigo":"620","descricao":"Tributação monofásica — combustíveis e biocombustíveis","cor":"#4f46e5"},{"codigo":"800","descricao":"Transferência de crédito e ajustes fiscais","cor":"#6b7280"}],"cclassTrib":[{"codigo":"000001","cst":"000","descricao":"Situações tributadas integralmente pelo IBS e CBS"},{"codigo":"000002","cst":"000","descricao":"Exploração de via"},{"codigo":"000003","cst":"000","descricao":"Regime automotivo — projetos incentivados (art. 311)"},{"codigo":"000004","cst":"000","descricao":"Regime automotivo — projetos incentivados (art. 312)"},{"codigo":"000005","cst":"000","descricao":"Operação com EAC destinado à mistura com gasolina A"},{"codigo":"010001","cst":"010","descricao":"Operações do FGTS não realizadas pela Caixa Econômica Federal"},{"codigo":"010002","cst":"010","descricao":"Operações do serviço financeiro"},{"codigo":"011001","cst":"011","descricao":"Planos de assistência funerária"},{"codigo":"011002","cst":"011","descricao":"Planos de assistência à saúde"},{"codigo":"011003","cst":"011","descricao":"Intermediação de planos de assistência à saúde"},{"codigo":"011004","cst":"011","descricao":"Concursos e prognósticos"},{"codigo":"011005","cst":"011","descricao":"Planos de assistência à saúde de animais domésticos"},{"codigo":"200001","cst":"200","descricao":"Serviços de transporte de bens até as zonas de processamento de exportação e bens exportados a partir das ZPE"},{"codigo":"200002","cst":"200","descricao":"Fornecimento ou importação para produtor rural não contribuinte ou TAC"},{"codigo":"200003","cst":"200","descricao":"Vendas de produtos destinados à alimentação humana (Cesta Básica Nacional — Anexo I)"},{"codigo":"200004","cst":"200","descricao":"Fornecimento de dispositivos médicos (Anexo XII)"},{"codigo":"200005","cst":"200","descricao":"Fornecimento de dispositivos médicos para órgãos da administração pública e entidades de saúde imunes (Anexo IV)"},{"codigo":"200006","cst":"200","descricao":"Situação de emergência de saúde pública reconhecida pelo Poder Público"},{"codigo":"200007","cst":"200","descricao":"Fornecimento dos dispositivos de acessibilidade próprios para pessoas com deficiência (Anexo XIII)"},{"codigo":"200008","cst":"200","descricao":"Fornecimento dos dispositivos de acessibilidade próprios para pessoas com deficiência adquiridos por órgãos da administração pública (Anexo V)"},{"codigo":"200009","cst":"200","descricao":"Fornecimento dos medicamentos registrados na Anvisa"},{"codigo":"200010","cst":"200","descricao":"Fornecimento dos medicamentos registrados na Anvisa, adquiridos por órgãos da administração pública"},{"codigo":"200011","cst":"200","descricao":"Fornecimento das composições para nutrição enteral e parenteral quando adquiridas por órgãos da administração pública (Anexo VI)"},{"codigo":"200012","cst":"200","descricao":"Situação de emergência de saúde pública reconhecida pelo Poder Público — variante"},{"codigo":"200013","cst":"200","descricao":"Fornecimento de tampões higiênicos, absorventes higiênicos internos ou externos"},{"codigo":"200014","cst":"200","descricao":"Fornecimento dos produtos hortícolas, frutas e ovos (Anexo XV)"},{"codigo":"200015","cst":"200","descricao":"Venda de automóveis de passageiros de fabricação nacional adquiridos por motoristas profissionais ou pessoas com deficiência"},{"codigo":"200016","cst":"200","descricao":"Prestação de serviços de pesquisa e desenvolvimento por Instituição Científica, Tecnológica e de Inovação (ICT)"},{"codigo":"200017","cst":"200","descricao":"Operações relacionadas ao FGTS"},{"codigo":"200018","cst":"200","descricao":"Operações de resseguro e retrocessão"},{"codigo":"200019","cst":"200","descricao":"Importador dos serviços financeiros contribuinte"},{"codigo":"200020","cst":"200","descricao":"Operação praticada por sociedades cooperativas optantes por regime específico do IBS e CBS"},{"codigo":"200021","cst":"200","descricao":"Serviços de transporte público coletivo de passageiros ferroviário e hidroviário"},{"codigo":"200022","cst":"200","descricao":"Operação originada fora da ZFM que destine bem material industrializado a contribuinte estabelecido na ZFM"},{"codigo":"200023","cst":"200","descricao":"Operação realizada por indústria incentivada que destine bem material intermediário para outra indústria incentivada na ZFM"},{"codigo":"200024","cst":"200","descricao":"Operação originada fora das Áreas de Livre Comércio destinadas a contribuinte estabelecido nas ALC"},{"codigo":"200025","cst":"200","descricao":"Fornecimento dos serviços de educação relacionados ao Programa Universidade para Todos (ProUni)"},{"codigo":"200026","cst":"200","descricao":"Locação de imóveis localizados nas zonas reabilitadas"},{"codigo":"200027","cst":"200","descricao":"Operações de locação, cessão onerosa e arrendamento de bens imóveis"},{"codigo":"200028","cst":"200","descricao":"Fornecimento dos serviços de educação (Anexo II)"},{"codigo":"200029","cst":"200","descricao":"Fornecimento dos serviços de saúde humana (Anexo III)"},{"codigo":"200030","cst":"200","descricao":"Venda dos dispositivos médicos (Anexo IV)"},{"codigo":"200031","cst":"200","descricao":"Fornecimento dos dispositivos de acessibilidade próprios para pessoas com deficiência (Anexo V)"},{"codigo":"200032","cst":"200","descricao":"Fornecimento dos medicamentos registrados na Anvisa ou produzidos por farmácias de manipulação, ressalvados os sujeitos à alíquota zero"},{"codigo":"200033","cst":"200","descricao":"Fornecimento das composições para nutrição enteral e parenteral (Anexo VI)"},{"codigo":"200034","cst":"200","descricao":"Fornecimento dos alimentos destinados ao consumo humano (Anexo VII)"},{"codigo":"200035","cst":"200","descricao":"Fornecimento dos produtos de higiene pessoal e limpeza (Anexo VIII)"},{"codigo":"200036","cst":"200","descricao":"Fornecimento de produtos agropecuários, aquícolas, pesqueiros, florestais e extrativistas vegetais in natura"},{"codigo":"200037","cst":"200","descricao":"Fornecimento de serviços ambientais de conservação ou recuperação da vegetação nativa"},{"codigo":"200038","cst":"200","descricao":"Fornecimento dos insumos agropecuários e aquícolas (Anexo IX)"},{"codigo":"200039","cst":"200","descricao":"Fornecimento dos bens e serviços relacionados com produções nacionais artísticas, culturais, de eventos, jornalísticas e audiovisuais (Anexo X)"},{"codigo":"200040","cst":"200","descricao":"Fornecimento de serviços de comunicação institucional à administração pública"},{"codigo":"200041","cst":"200","descricao":"Fornecimento de serviço de educação desportiva (art. 141, I)"},{"codigo":"200042","cst":"200","descricao":"Fornecimento de serviço de gestão e exploração do desporto (art. 141, II)"},{"codigo":"200043","cst":"200","descricao":"Fornecimento à administração pública dos serviços e bens relativos à soberania (Anexo XI)"},{"codigo":"200044","cst":"200","descricao":"Operações e prestações de serviços de segurança da informação e segurança cibernética desenvolvidos por sociedade que tenha sócio brasileiro (Anexo XI)"},{"codigo":"200045","cst":"200","descricao":"Operações relacionadas a projetos de reabilitação urbana de zonas históricas e de áreas críticas de recuperação e reconversão urbanística"},{"codigo":"200046","cst":"200","descricao":"Operações com bens imóveis"},{"codigo":"200047","cst":"200","descricao":"Bares e Restaurantes"},{"codigo":"200048","cst":"200","descricao":"Hotelaria, Parques de Diversão e Parques Temáticos"},{"codigo":"200049","cst":"200","descricao":"Transporte coletivo de passageiros rodoviário, ferroviário e hidroviário"},{"codigo":"200050","cst":"200","descricao":"Serviços de transporte aéreo regional coletivo de passageiros ou de carga"},{"codigo":"200051","cst":"200","descricao":"Agências de Turismo"},{"codigo":"200052","cst":"200","descricao":"Prestação de serviços de profissões intelectuais"},{"codigo":"200053","cst":"200","descricao":"Fornecimento de medicamentos registrados na Anvisa, quando classificados como soros ou vacinas"},{"codigo":"200054","cst":"200","descricao":"Fornecimento de bem material pela cooperativa de produção agropecuária a associado não sujeito ao regime regular do IBS e da CBS"},{"codigo":"220001","cst":"220","descricao":"Incorporação imobiliária submetida ao Regime Especial de Tributação (RET) — alíquota fixa sobre receita bruta mensal"},{"codigo":"220002","cst":"220","descricao":"Incorporação imobiliária submetida ao Regime Especial de Tributação (RET) — variante"},{"codigo":"220003","cst":"220","descricao":"Alienação de imóvel decorrente de parcelamento do solo"},{"codigo":"221001","cst":"221","descricao":"Locação, cessão onerosa ou arrendamento de bem imóvel — alíquota proporcional sobre a receita bruta"},{"codigo":"221002","cst":"221","descricao":"Incorporação imobiliária submetida ao Regime Especial de Tributação (RET)"},{"codigo":"221003","cst":"221","descricao":"Incorporação imobiliária submetida ao Regime Especial de Tributação (RET) — variante"},{"codigo":"221004","cst":"221","descricao":"Alienação de imóvel decorrente de parcelamento do solo"},{"codigo":"222001","cst":"222","descricao":"Transporte internacional de passageiros, caso os trechos de ida e volta sejam vendidos em conjunto"},{"codigo":"400001","cst":"400","descricao":"Fornecimento de serviços de transporte público coletivo de passageiros rodoviário e metroviário"},{"codigo":"400002","cst":"400","descricao":"Fornecimento de serviços de transporte público coletivo de passageiros rodoviário e metroviário — medição por quilômetro rodado"},{"codigo":"410001","cst":"410","descricao":"Fornecimento de bonificações quando constem no documento fiscal e que não dependam de evento posterior"},{"codigo":"410002","cst":"410","descricao":"Transferências entre estabelecimentos pertencentes ao mesmo contribuinte"},{"codigo":"410003","cst":"410","descricao":"Doações sem contraprestação em benefício do doador"},{"codigo":"410004","cst":"410","descricao":"Exportações de bens e serviços"},{"codigo":"410005","cst":"410","descricao":"Fornecimentos realizados pela União, pelos Estados, pelo Distrito Federal e pelos Municípios"},{"codigo":"410006","cst":"410","descricao":"Fornecimentos realizados por entidades religiosas e templos de qualquer culto"},{"codigo":"410007","cst":"410","descricao":"Fornecimentos realizados por partidos políticos, entidades sindicais e instituições de educação e de assistência social"},{"codigo":"410008","cst":"410","descricao":"Fornecimentos de livros, jornais, periódicos e do papel destinado a sua impressão"},{"codigo":"410009","cst":"410","descricao":"Fornecimentos de fonogramas e videofonogramas musicais produzidos no Brasil"},{"codigo":"410010","cst":"410","descricao":"Fornecimentos de serviço de comunicação nas modalidades de radiodifusão sonora e de sons e imagens de recepção livre e gratuita"},{"codigo":"410011","cst":"410","descricao":"Fornecimentos de ouro, quando definido em lei como ativo financeiro ou instrumento cambial"},{"codigo":"410012","cst":"410","descricao":"Fornecimento de condomínio edilício não optante pelo regime regular"},{"codigo":"410013","cst":"410","descricao":"Exportações de combustíveis"},{"codigo":"410014","cst":"410","descricao":"Fornecimento de produtor rural não contribuinte"},{"codigo":"410015","cst":"410","descricao":"Fornecimento por transportador autônomo não contribuinte"},{"codigo":"410016","cst":"410","descricao":"Fornecimento ou aquisição de resíduos sólidos"},{"codigo":"410017","cst":"410","descricao":"Aquisição de bem móvel com crédito presumido sob condição de revenda realizada"},{"codigo":"410018","cst":"410","descricao":"Operações relacionadas aos fundos garantidores e executores de políticas públicas"},{"codigo":"410019","cst":"410","descricao":"Exclusão da gorjeta na base de cálculo no fornecimento de alimentação"},{"codigo":"410020","cst":"410","descricao":"Exclusão do valor de intermediação na base de cálculo no fornecimento de alimentação"},{"codigo":"410021","cst":"410","descricao":"Contribuição de que trata o art. 149-A da Constituição Federal"},{"codigo":"410022","cst":"410","descricao":"Consolidação da propriedade do bem pelo credor"},{"codigo":"410023","cst":"410","descricao":"Alienação de bens móveis ou imóveis que tenham sido objeto de garantia em que o prestador da garantia não seja contribuinte"},{"codigo":"410024","cst":"410","descricao":"Consolidação da propriedade do bem pelo grupo de consórcio"},{"codigo":"410025","cst":"410","descricao":"Alienação de bem que tenha sido objeto de garantia em que o prestador da garantia não seja contribuinte"},{"codigo":"410026","cst":"410","descricao":"Doação com anulação de crédito"},{"codigo":"410027","cst":"410","descricao":"Exportação de serviço ou de bem imaterial"},{"codigo":"410028","cst":"410","descricao":"Operações com bens imóveis realizadas por pessoas físicas não consideradas contribuintes"},{"codigo":"410029","cst":"410","descricao":"Operações acobertadas somente pelo ICMS"},{"codigo":"410030","cst":"410","descricao":"Estorno de crédito por perecimento, deterioração, roubo, furto ou extravio"},{"codigo":"410031","cst":"410","descricao":"Fornecimento em período anterior ao início de vigência de incidências de CBS e IBS"},{"codigo":"410032","cst":"410","descricao":"Tributos incidentes na operação que não integram a base de cálculo do IBS e da CBS"},{"codigo":"410033","cst":"410","descricao":"Operações de Fundos de Investimento Imobiliário (FII) e Fundos de Investimento nas Cadeias Produtivas do Agronegócio (Fiagro)"},{"codigo":"410034","cst":"410","descricao":"Operações de fundos de investimento"},{"codigo":"410035","cst":"410","descricao":"Fornecimento realizado por nanoempreendedor"},{"codigo":"410036","cst":"410","descricao":"Descontos incondicionais"},{"codigo":"410037","cst":"410","descricao":"Importação de bens materiais sem incidência de IBS e CBS"},{"codigo":"410999","cst":"410","descricao":"Operações não onerosas sem previsão de tributação, não especificadas anteriormente"},{"codigo":"510001","cst":"510","descricao":"Operações, sujeitas a diferimento, com energia elétrica relativas à importação, geração, comercialização, distribuição e transmissão"},{"codigo":"515001","cst":"515","descricao":"Operações, sujeitas a diferimento, com insumos agropecuários e aquícolas (Anexo IX)"},{"codigo":"550001","cst":"550","descricao":"Exportações de bens materiais"},{"codigo":"550002","cst":"550","descricao":"Regime de Trânsito Aduaneiro"}]};
+
+let allRecords = INLINE_DATA.cclassTrib;
+let grupos = {};
+INLINE_DATA.grupos_cst.forEach(g => grupos[g.codigo] = g);
+
+let query = '';
+let cstFilter = '';
+
+// ── Inicialização ──
+(function init() {
+  document.getElementById('atualizado').textContent = 'Atualizado: ' + INLINE_DATA.meta.atualizado_em;
+  buildFilters(INLINE_DATA.grupos_cst);
+  render();
+})();
+
+function buildFilters(grupos_cst) {
+  const sel = document.getElementById('cst-filter');
+  grupos_cst.forEach(g => {
+    const opt = document.createElement('option');
+    opt.value = g.codigo;
+    opt.textContent = g.codigo + ' — ' + g.descricao.substring(0, 50) + (g.descricao.length > 50 ? '…' : '');
+    sel.appendChild(opt);
+  });
+}
+
+function hl(text, q) {
+  if (!q) return escHtml(text);
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx < 0) return escHtml(text);
+  return escHtml(text.slice(0, idx)) +
+    '<mark>' + escHtml(text.slice(idx, idx + q.length)) + '</mark>' +
+    escHtml(text.slice(idx + q.length));
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function matches(r) {
+  if (cstFilter && r.cst !== cstFilter) return false;
+  if (!query) return true;
+  const q = query.toLowerCase();
+  return r.codigo.toLowerCase().includes(q) || r.descricao.toLowerCase().includes(q);
+}
+
+function render() {
+  const filtered = allRecords.filter(matches);
+  document.getElementById('count').textContent = filtered.length.toLocaleString('pt-BR');
+
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(r => {
+    const g = grupos[r.cst] || {};
+    const cor = g.cor || '#6b7280';
+    return `<tr>
+      <td class="code-cell">${hl(r.codigo, query)}</td>
+      <td class="desc-cell">${hl(r.descricao, query)}</td>
+      <td><span class="cst-pill" style="background:${cor}">${r.cst}</span></td>
+      <td><button class="copy-btn" onclick="copy(this,'${r.codigo}')">Copiar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function copy(btn, code) {
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = '✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// ── CSV export ──
+document.getElementById('csv-btn').addEventListener('click', () => {
+  const filtered = allRecords.filter(matches);
+  const rows = [['codigo', 'cst', 'grupo_descricao', 'descricao']];
+  filtered.forEach(r => {
+    const g = grupos[r.cst] || {};
+    rows.push([r.codigo, r.cst, g.descricao || '', r.descricao]);
+  });
+  const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  a.download = 'cclassTrib-ibs-cbs.csv'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ── Search & filter ──
+let debounceTimer;
+document.getElementById('q').addEventListener('input', e => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => { query = e.target.value.trim(); render(); }, 150);
+});
+document.getElementById('cst-filter').addEventListener('change', e => {
+  cstFilter = e.target.value; render();
+});
+</script>
+</body>
+</html>
