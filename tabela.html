@@ -110,32 +110,43 @@
       z-index: 10;
     }
     .sidebar-brand {
-      padding: 20px 16px 16px;
+      padding: 18px 16px 14px;
       border-bottom: 1px solid var(--sidebar-border);
+    }
+    .sidebar-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sidebar-brand-logo svg {
+      flex-shrink: 0;
+      color: var(--sidebar-text);
     }
     .sidebar-brand-title {
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--sidebar-text-active);
-      letter-spacing: .03em;
+      letter-spacing: -.01em;
+      line-height: 1.1;
     }
     .sidebar-brand-sub {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
-      letter-spacing: .12em;
+      letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--sidebar-accent);
-      margin-top: 2px;
+      margin-top: 3px;
     }
     .sidebar-brand-meta {
       font-size: 11px;
       color: var(--sidebar-muted);
-      margin-top: 8px;
-      line-height: 1.4;
+      line-height: 1.5;
+      padding-top: 2px;
     }
     .sidebar-total {
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       color: var(--sidebar-text-active);
       font-variant-numeric: tabular-nums;
     }
@@ -156,32 +167,41 @@
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 7px 16px;
+      gap: 8px;
+      padding: 6px 14px 6px 12px;
       cursor: pointer;
       border: none;
+      border-left: 3px solid transparent;
       background: none;
       width: 100%;
       text-align: left;
-      transition: background .12s;
+      transition: background .12s, border-color .12s;
       border-radius: 0;
     }
     .nav-item:hover { background: var(--sidebar-hover); }
-    .nav-item.active { background: var(--sidebar-active); }
-    .nav-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      opacity: .85;
+    .nav-item.active {
+      background: var(--sidebar-active);
+      border-left-color: var(--item-color, var(--sidebar-accent));
     }
+    .nav-dot {
+      width: 3px; height: 18px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      transition: opacity .12s;
+      opacity: 0;
+    }
+    .nav-item:hover .nav-dot { opacity: .35; }
+    .nav-item.active .nav-dot { opacity: 1; }
     .nav-cst-code {
       font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
       font-size: 11px;
       font-weight: 700;
       color: var(--sidebar-text-active);
-      letter-spacing: .03em;
-      min-width: 28px;
+      letter-spacing: .04em;
+      min-width: 30px;
+      opacity: .7;
     }
+    .nav-item.active .nav-cst-code { opacity: 1; color: var(--item-color, var(--sidebar-accent)); }
     .nav-name {
       flex: 1;
       font-size: 11.5px;
@@ -190,14 +210,22 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .nav-item.active .nav-name { color: var(--sidebar-text-active); }
+    .nav-item.active .nav-name { color: var(--sidebar-text-active); font-weight: 500; }
     .nav-count {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--sidebar-muted);
       font-variant-numeric: tabular-nums;
       font-weight: 600;
+      background: rgba(255,255,255,.05);
+      border-radius: 99px;
+      padding: 1px 6px;
+      min-width: 22px;
+      text-align: center;
     }
-    .nav-item.active .nav-count { color: var(--sidebar-accent); }
+    .nav-item.active .nav-count {
+      background: var(--item-color, var(--sidebar-accent));
+      color: #fff;
+    }
     .nav-all .nav-name { color: var(--sidebar-text-active); font-weight: 600; }
 
     .sidebar-footer {
@@ -362,12 +390,19 @@
       border-radius: var(--radius-md);
       box-shadow: var(--shadow);
     }
-    thead tr { background: var(--bg); }
+    thead tr { background: var(--surface); }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: var(--surface);
+      box-shadow: 0 1px 0 var(--border);
+    }
     th {
-      padding: 9px 14px;
+      padding: 10px 14px;
       text-align: left;
-      font-size: 10.5px; font-weight: 700;
-      letter-spacing: .07em; text-transform: uppercase;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: .09em; text-transform: uppercase;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
@@ -405,14 +440,16 @@
     mark { background: var(--highlight); border-radius: 2px; padding: 0 2px; color: inherit; }
 
     .copy-btn {
-      padding: 3px 9px; border-radius: var(--radius);
-      font-size: 11px; cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg); color: var(--text-muted);
+      padding: 4px 10px; border-radius: var(--radius);
+      font-size: 11px; font-weight: 500; cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent; color: var(--text-muted);
       white-space: nowrap; transition: all .12s;
+      opacity: 0;
     }
-    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .copy-btn.copied { color: #0A6B4A; border-color: #86efac; background: #f0fdf4; }
+    tbody tr:hover .copy-btn { opacity: 1; border-color: var(--border); background: var(--bg); }
+    .copy-btn:hover { border-color: var(--accent) !important; color: var(--accent); }
+    .copy-btn.copied { opacity: 1; color: #0A6B4A; border-color: #86efac; background: #f0fdf4; }
 
     /* ── Empty / Error ── */
     .empty {
@@ -450,11 +487,23 @@
   <!-- ═══ SIDEBAR ═══ -->
   <aside class="sidebar" id="sidebar" role="navigation" aria-label="Grupos CST">
     <div class="sidebar-brand">
-      <div class="sidebar-brand-title">Tributeca</div>
-      <div class="sidebar-brand-sub">IBS · CBS · LC 214/2025</div>
+      <div class="sidebar-brand-logo">
+        <svg width="30" height="28" viewBox="0 0 30 28" fill="none" aria-hidden="true">
+          <rect x="0" y="0" width="30" height="8" rx="2.5" fill="#1DB881" opacity=".9"/>
+          <rect x="0" y="10" width="14" height="8" rx="2" fill="currentColor" opacity=".45"/>
+          <rect x="16" y="10" width="14" height="8" rx="2" fill="currentColor" opacity=".25"/>
+          <rect x="0" y="20" width="14" height="8" rx="2" fill="currentColor" opacity=".2"/>
+          <rect x="16" y="20" width="14" height="8" rx="2" fill="currentColor" opacity=".5"/>
+        </svg>
+        <div>
+          <div class="sidebar-brand-title">Tributeca</div>
+          <div class="sidebar-brand-sub">IBS · CBS · LC 214/2025</div>
+        </div>
+      </div>
       <div class="sidebar-brand-meta">
-        <span class="sidebar-total" id="sb-total">164</span> códigos ativos<br>
-        <span id="sb-date">ago/2026</span> · fonte SVRS/CGIBS
+        <span class="sidebar-total" id="sb-total">164</span> registros
+        · <span id="sb-date">ago/2026</span>
+        · <span style="color:var(--sidebar-accent);font-weight:600">SVRS/CGIBS</span>
       </div>
     </div>
 
@@ -592,9 +641,10 @@ function makeNavItem(cst, name, count, color, isAll) {
   btn.className = 'nav-item' + (isAll ? ' nav-all active' : '');
   btn.dataset.cst = cst;
   btn.setAttribute('role', 'menuitem');
+  btn.style.setProperty('--item-color', color);
   btn.innerHTML = `
     <span class="nav-dot" style="background:${color}"></span>
-    <span class="nav-cst-code">${cst || '—'}</span>
+    <span class="nav-cst-code">${cst || '·'}</span>
     <span class="nav-name">${esc(name)}</span>
     <span class="nav-count">${count}</span>
   `;

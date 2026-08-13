@@ -90,7 +90,8 @@
       gap: 10px;
       text-decoration: none;
     }
-    .topnav-title { font-size: 14px; font-weight: 700; color: #fff; }
+    .topnav-brand svg { color: var(--nav-text); }
+    .topnav-title { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.01em; }
     .topnav-sub {
       font-size: 10px; font-weight: 600; letter-spacing: .1em;
       text-transform: uppercase; color: var(--nav-accent);
@@ -108,35 +109,74 @@
     /* ── Hero ── */
     .hero {
       background: var(--nav-bg);
-      padding: 40px 24px 48px;
+      padding: 44px 24px 0;
       text-align: center;
       border-bottom: 1px solid rgba(255,255,255,.06);
+      overflow: hidden;
     }
     .hero-tag {
       display: inline-block;
-      font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
       text-transform: uppercase; color: var(--nav-accent);
-      background: rgba(29,184,129,.12); border: 1px solid rgba(29,184,129,.2);
-      border-radius: 99px; padding: 3px 12px; margin-bottom: 14px;
+      background: rgba(29,184,129,.1); border: 1px solid rgba(29,184,129,.18);
+      border-radius: 99px; padding: 3px 12px; margin-bottom: 16px;
     }
     .hero-title {
-      font-size: clamp(22px, 4vw, 30px);
+      font-size: clamp(24px, 4vw, 34px);
       font-weight: 800; color: #fff;
-      letter-spacing: -.4px; line-height: 1.2;
-      margin-bottom: 10px;
+      letter-spacing: -.5px; line-height: 1.15;
+      margin-bottom: 12px;
+      text-wrap: balance;
     }
     .hero-sub {
       font-size: 15px; color: var(--nav-text);
-      max-width: 520px; margin: 0 auto 20px;
-      line-height: 1.6;
+      max-width: 480px; margin: 0 auto 20px;
+      line-height: 1.65;
     }
     .hero-callout {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.25);
-      border-radius: var(--radius); padding: 8px 14px;
-      font-size: 12.5px; color: #FCA5A5;
+      background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.22);
+      border-radius: var(--radius); padding: 7px 14px;
+      font-size: 12px; color: #FCA5A5;
+      margin-bottom: 32px;
     }
     .hero-callout strong { color: #FEE2E2; }
+
+    /* ── Hero step flow visual ── */
+    .hero-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 0 auto;
+      max-width: 560px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 0;
+    }
+    .hero-flow-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 8px;
+      font-size: 11px;
+      color: var(--nav-text);
+      border-right: 1px solid rgba(255,255,255,.07);
+      opacity: .8;
+    }
+    .hero-flow-step:last-child { border-right: none; }
+    .hero-flow-step:first-child { opacity: 1; }
+    .hero-flow-icon {
+      font-size: 20px;
+      line-height: 1;
+      padding: 8px;
+      background: rgba(255,255,255,.05);
+      border-radius: 10px;
+      margin-bottom: 2px;
+    }
+    .hero-flow-label { font-weight: 600; font-size: 11px; color: rgba(255,255,255,.7); }
+    .hero-flow-sub { font-size: 10px; color: var(--nav-text); text-align: center; line-height: 1.3; }
 
     /* ── Wizard container ── */
     .wizard-wrap {
@@ -151,38 +191,48 @@
       align-items: center;
       gap: 0;
       margin-bottom: 28px;
-      padding: 0 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 5px;
+      box-shadow: var(--shadow);
     }
     .prog-step {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       flex: 1;
       min-width: 0;
+      padding: 5px 10px;
+      border-radius: 99px;
+      transition: background .2s;
     }
+    .prog-step.active-step { background: var(--accent-light); }
     .prog-dot {
-      width: 28px; height: 28px;
+      width: 22px; height: 22px;
       border-radius: 50%;
-      background: var(--surface);
-      border: 2px solid var(--border);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700;
+      font-size: 10px; font-weight: 800;
       color: var(--text-muted);
       flex-shrink: 0;
       transition: all .2s;
     }
-    .prog-dot.active { border-color: var(--accent); color: var(--accent); }
+    .prog-dot.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .prog-dot.done { background: var(--accent); border-color: var(--accent); color: #fff; }
     .prog-label {
-      font-size: 11.5px; color: var(--text-muted);
+      font-size: 11px; color: var(--text-muted);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-weight: 500;
     }
-    .prog-label.active { color: var(--accent); font-weight: 600; }
+    .prog-label.active { color: var(--accent); font-weight: 700; }
     .prog-line {
-      flex: 1; height: 2px;
+      width: 20px; height: 2px;
       background: var(--border);
-      margin: 0 8px;
+      flex-shrink: 0;
       transition: background .3s;
+      border-radius: 1px;
     }
     .prog-line.done { background: var(--accent); }
 
@@ -224,30 +274,47 @@
     /* ── Option cards ── */
     .options-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
     }
     .option-card {
       background: var(--surface);
-      border: 2px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 18px 16px 16px;
+      padding: 20px 18px 18px;
       cursor: pointer;
-      transition: all .15s;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       box-shadow: var(--shadow-card);
+      position: relative;
+    }
+    .option-card::after {
+      content: '→';
+      position: absolute;
+      right: 14px; bottom: 16px;
+      font-size: 14px;
+      color: var(--border);
+      transition: color .15s, right .15s;
     }
     .option-card:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(10,107,74,.12), var(--shadow-card);
-      transform: translateY(-1px);
+      box-shadow: 0 0 0 3px rgba(10,107,74,.10), var(--shadow-card);
+      transform: translateY(-2px);
     }
-    .option-icon { font-size: 26px; line-height: 1; margin-bottom: 2px; }
-    .option-label { font-size: 14px; font-weight: 700; color: var(--text); }
-    .option-sub { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .option-card:hover::after { color: var(--accent); right: 12px; }
+    .option-icon {
+      font-size: 28px; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      margin-bottom: 4px;
+    }
+    .option-label { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .option-sub { font-size: 11.5px; color: var(--text-muted); line-height: 1.4; padding-right: 20px; }
 
     /* ── Back button ── */
     .back-btn {
@@ -265,22 +332,42 @@
     .result { animation: fadeIn .25s ease; }
     .result-header {
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-      padding: 24px 24px 20px;
+      padding: 28px 28px 24px;
       display: flex;
       align-items: flex-start;
-      gap: 16px;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
     }
-    .result-icon { font-size: 36px; line-height: 1; flex-shrink: 0; }
-    .result-header-text {}
-    .result-title { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-    .result-subtitle { font-size: 13px; color: rgba(255,255,255,.7); }
+    .result-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .result-icon {
+      font-size: 40px; line-height: 1; flex-shrink: 0;
+      width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.1);
+      border-radius: var(--radius-lg);
+    }
+    .result-header-text { position: relative; }
+    .result-eyebrow {
+      font-size: 9.5px; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.5);
+      margin-bottom: 4px;
+    }
+    .result-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; letter-spacing: -.3px; }
+    .result-subtitle { font-size: 12.5px; color: rgba(255,255,255,.65); line-height: 1.4; }
 
     .result-body {
       background: var(--surface);
       border: 1px solid var(--border);
       border-top: none;
       border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-      padding: 24px;
+      padding: 24px 28px 28px;
       box-shadow: var(--shadow-md);
     }
 
@@ -290,18 +377,19 @@
     }
     .code-block {
       background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      display: flex; flex-direction: column; gap: 2px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px 10px;
+      display: flex; flex-direction: column; gap: 3px;
+      min-width: 140px;
     }
-    .code-block-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+    .code-block-label { font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
     .code-block-value {
       font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 18px; font-weight: 800;
-      letter-spacing: .03em;
+      font-size: 22px; font-weight: 800;
+      letter-spacing: .04em;
     }
-    .code-block-desc { font-size: 11px; color: var(--text-muted); }
+    .code-block-desc { font-size: 11px; color: var(--text-muted); line-height: 1.35; margin-top: 2px; }
 
     .result-section {
       margin-bottom: 20px;
@@ -403,9 +491,16 @@
     @media (max-width: 600px) {
       .options-grid { grid-template-columns: 1fr 1fr; }
       .wizard-wrap { padding: 20px 14px 48px; }
-      .hero { padding: 28px 16px 36px; }
+      .hero { padding: 28px 16px 0; }
+      .hero-flow-sub { display: none; }
       .codes-row { flex-direction: column; }
       .prog-label { display: none; }
+      .result-body { padding: 20px 18px 24px; }
+      .result-header { padding: 20px 18px 18px; gap: 12px; }
+      .result-icon { width: 48px; height: 48px; font-size: 28px; }
+    }
+    @media (max-width: 420px) {
+      .hero-flow { display: none; }
     }
     @media (max-width: 400px) {
       .options-grid { grid-template-columns: 1fr; }
@@ -420,6 +515,13 @@
 <nav class="topnav">
   <div style="display:flex;align-items:center;gap:14px">
     <a class="topnav-brand" href="index.html">
+      <svg width="26" height="24" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <rect x="0" y="0" width="26" height="7" rx="2" fill="#1DB881" opacity=".85"/>
+        <rect x="0" y="9" width="12" height="7" rx="1.5" fill="currentColor" opacity=".45"/>
+        <rect x="14" y="9" width="12" height="7" rx="1.5" fill="currentColor" opacity=".25"/>
+        <rect x="0" y="18" width="12" height="6" rx="1.5" fill="currentColor" opacity=".2"/>
+        <rect x="14" y="18" width="12" height="6" rx="1.5" fill="currentColor" opacity=".55"/>
+      </svg>
       <div>
         <div class="topnav-title">Tributeca</div>
         <div class="topnav-sub">IBS · CBS · LC 214/2025</div>
@@ -442,13 +544,37 @@
   <div class="hero-tag">Reforma Tributária · LC 214/2025</div>
   <h1 class="hero-title">Qual tributação se aplica<br>ao seu negócio?</h1>
   <p class="hero-sub">
-    Responda 2 a 3 perguntas simples e descubra o CST e o cClassTrib correto para emitir sua NF-e conforme a reforma tributária.
+    Responda 2 a 3 perguntas e descubra o CST e cClassTrib correto para emitir sua NF-e — com explicação didática do regime.
   </p>
   <div class="hero-callout">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
     </svg>
     Campo <strong>cClassTrib obrigatório</strong> a partir de 03/08/2026 para não-Simples
+  </div>
+
+  <!-- Step flow preview -->
+  <div class="hero-flow">
+    <div class="hero-flow-step">
+      <div class="hero-flow-icon">🏢</div>
+      <div class="hero-flow-label">Perfil</div>
+      <div class="hero-flow-sub">Empresa, Simples,<br>rural, entidade</div>
+    </div>
+    <div class="hero-flow-step">
+      <div class="hero-flow-icon">⚙️</div>
+      <div class="hero-flow-label">Atividade</div>
+      <div class="hero-flow-sub">Bens, serviços,<br>imóveis, exportação</div>
+    </div>
+    <div class="hero-flow-step">
+      <div class="hero-flow-icon">🎯</div>
+      <div class="hero-flow-label">Segmento</div>
+      <div class="hero-flow-sub">Saúde, educação,<br>alimentos, combustível</div>
+    </div>
+    <div class="hero-flow-step">
+      <div class="hero-flow-icon">📋</div>
+      <div class="hero-flow-label">Resultado</div>
+      <div class="hero-flow-sub">CST + cClassTrib<br>+ como usar</div>
+    </div>
   </div>
 </div>
 
@@ -457,22 +583,22 @@
 
   <!-- Progress bar -->
   <div class="progress-bar" id="progress-bar">
-    <div class="prog-step">
+    <div class="prog-step active-step" id="ps-1">
       <div class="prog-dot active" id="pd-1">1</div>
       <span class="prog-label active" id="pl-1">Perfil</span>
     </div>
     <div class="prog-line" id="pline-1"></div>
-    <div class="prog-step">
+    <div class="prog-step" id="ps-2">
       <div class="prog-dot" id="pd-2">2</div>
       <span class="prog-label" id="pl-2">Atividade</span>
     </div>
     <div class="prog-line" id="pline-2"></div>
-    <div class="prog-step">
+    <div class="prog-step" id="ps-3">
       <div class="prog-dot" id="pd-3">3</div>
       <span class="prog-label" id="pl-3">Segmento</span>
     </div>
     <div class="prog-line" id="pline-3"></div>
-    <div class="prog-step">
+    <div class="prog-step" id="ps-4">
       <div class="prog-dot" id="pd-4">4</div>
       <span class="prog-label" id="pl-4">Resultado</span>
     </div>
@@ -1275,6 +1401,7 @@ function renderResult(container, result) {
       <div class="result-header" style="background:${headerColor}">
         <div class="result-icon">${result.icon}</div>
         <div class="result-header-text">
+          <div class="result-eyebrow">Regime tributário identificado</div>
           <div class="result-title">${esc(result.title)}</div>
           <div class="result-subtitle">${esc(result.subtitle)}</div>
         </div>
@@ -1341,11 +1468,13 @@ function updateProgress(step) {
     const dot = document.getElementById(`pd-${i}`);
     const label = document.getElementById(`pl-${i}`);
     const line = document.getElementById(`pline-${i}`);
+    const ps = document.getElementById(`ps-${i}`);
     if (!dot) continue;
     dot.className = 'prog-dot' + (i < step ? ' done' : i === step ? ' active' : '');
     dot.textContent = i < step ? '✓' : String(i);
     if (label) label.className = 'prog-label' + (i === step ? ' active' : '');
     if (line) line.className = 'prog-line' + (i < step ? ' done' : '');
+    if (ps) ps.className = 'prog-step' + (i === step ? ' active-step' : '');
   }
 }
 
