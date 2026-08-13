@@ -107,59 +107,74 @@
     .topnav-sep { width: 1px; height: 24px; background: rgba(255,255,255,.12); }
     .topnav-page { font-size: 13px; color: var(--nav-text); }
     .topnav-table-link {
-      font-size: 12px; color: var(--nav-text); text-decoration: none;
-      padding: 6px 12px; border: 1px solid rgba(255,255,255,.12);
+      font-size: 12px; color: #fff; text-decoration: none;
+      padding: 7px 16px; background: var(--nav-accent); border: 1px solid transparent;
       border-radius: var(--radius); transition: all .15s;
       display: flex; align-items: center; gap: 5px;
+      font-weight: 700; letter-spacing: .01em;
     }
-    .topnav-table-link:hover { color: #fff; border-color: rgba(255,255,255,.25); }
+    .topnav-table-link:hover { background: #18A874; color: #fff; }
 
     /* ── Hero ── */
     .hero {
-      background: var(--nav-bg);
-      padding: 44px 24px 0;
+      background: var(--surface);
+      padding: 56px 24px 0;
       text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid var(--border);
       overflow: hidden;
     }
     .hero-tag {
-      display: inline-block;
+      display: inline-flex; align-items: center; gap: 6px;
       font-size: 10px; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--nav-accent);
-      background: rgba(29,184,129,.1); border: 1px solid rgba(29,184,129,.18);
-      border-radius: 99px; padding: 3px 12px; margin-bottom: 16px;
+      text-transform: uppercase; color: var(--accent);
+      background: var(--accent-light); border: 1px solid rgba(10,107,74,.2);
+      border-radius: 99px; padding: 4px 14px; margin-bottom: 20px;
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); display: inline-block; opacity: .8;
     }
     .hero-title {
-      font-size: clamp(24px, 4vw, 34px);
-      font-weight: 800; color: #fff;
-      letter-spacing: -.5px; line-height: 1.15;
-      margin-bottom: 12px;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800; color: var(--text);
+      letter-spacing: -.5px; line-height: 1.1;
+      margin-bottom: 16px;
       text-wrap: balance;
     }
+    .hero-title .hl { color: var(--nav-accent); }
     .hero-sub {
-      font-size: 15px; color: var(--nav-text);
-      max-width: 480px; margin: 0 auto 20px;
+      font-size: 16px; color: var(--text-muted);
+      max-width: 500px; margin: 0 auto 20px;
       line-height: 1.65;
     }
     .hero-callout {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.22);
+      background: #FEF2F2; border: 1px solid rgba(220,38,38,.2);
       border-radius: var(--radius); padding: 7px 14px;
-      font-size: 12px; color: #FCA5A5;
-      margin-bottom: 32px;
+      font-size: 12px; color: #991B1B;
+      margin-bottom: 36px;
     }
-    .hero-callout strong { color: #FEE2E2; }
+    .hero-callout strong { color: #7F1D1D; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .hero-callout {
+        background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.22); color: #FCA5A5;
+      }
+      :root:not([data-theme="light"]) .hero-callout strong { color: #FEE2E2; }
+    }
+    :root[data-theme="dark"] .hero-callout { background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.22); color: #FCA5A5; }
+    :root[data-theme="dark"] .hero-callout strong { color: #FEE2E2; }
 
     /* ── Hero step flow visual ── */
     .hero-flow {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
       gap: 0;
-      margin: 0 auto;
-      max-width: 560px;
-      border-top: 1px solid rgba(255,255,255,.07);
+      margin: 0 -24px;
+      max-width: none;
+      border-top: 1px solid var(--border);
       padding: 0;
+      background: var(--bg);
     }
     .hero-flow-step {
       flex: 1;
@@ -167,24 +182,42 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      padding: 16px 8px;
+      padding: 18px 8px;
       font-size: 11px;
-      color: var(--nav-text);
-      border-right: 1px solid rgba(255,255,255,.07);
-      opacity: .8;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      opacity: 1;
     }
     .hero-flow-step:last-child { border-right: none; }
-    .hero-flow-step:first-child { opacity: 1; }
     .hero-flow-icon {
       font-size: 20px;
       line-height: 1;
       padding: 8px;
-      background: rgba(255,255,255,.05);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 10px;
       margin-bottom: 2px;
     }
-    .hero-flow-label { font-weight: 600; font-size: 11px; color: rgba(255,255,255,.7); }
-    .hero-flow-sub { font-size: 10px; color: var(--nav-text); text-align: center; line-height: 1.3; }
+    .hero-flow-label { font-weight: 700; font-size: 11px; color: var(--text); }
+    .hero-flow-sub { font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.3; }
+
+    /* ── Hero stats strip ── */
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .hero-stats strong { color: var(--text); font-weight: 700; }
+    .hero-stat-sep { color: var(--border); user-select: none; }
+    .hero-stat-link { color: var(--accent); text-decoration: none; }
+    .hero-stat-link:hover { text-decoration: underline; }
 
     /* ── Wizard container ── */
     .wizard-wrap {
@@ -500,7 +533,9 @@
       .options-grid { grid-template-columns: 1fr 1fr; }
       .wizard-wrap { padding: 20px 14px 48px; }
       .hero { padding: 28px 16px 0; }
+      .hero-flow { margin: 0 -16px; }
       .hero-flow-sub { display: none; }
+      .hero-stats { font-size: 11px; gap: 6px; padding: 8px 16px; }
       .codes-row { flex-direction: column; }
       .prog-label { display: none; }
       .result-body { padding: 20px 18px 24px; }
@@ -509,6 +544,7 @@
     }
     @media (max-width: 420px) {
       .hero-flow { display: none; }
+      .hero-stats { display: none; }
     }
     @media (max-width: 400px) {
       .options-grid { grid-template-columns: 1fr; }
@@ -550,9 +586,9 @@
 <!-- ── Hero ── -->
 <div class="hero">
   <div class="hero-tag">Reforma Tributária · LC 214/2025</div>
-  <h1 class="hero-title">Qual tributação se aplica<br>ao seu negócio?</h1>
+  <h1 class="hero-title">Qual tributação se aplica<br>ao seu <span class="hl">negócio?</span></h1>
   <p class="hero-sub">
-    Responda 2 a 3 perguntas e descubra o CST e cClassTrib correto para emitir sua NF-e — com explicação didática do regime.
+    Responda 2 a 3 perguntas e descubra o CST e <strong>cClassTrib</strong> correto para emitir sua NF-e — com explicação didática do regime tributário.
   </p>
   <div class="hero-callout">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -584,6 +620,17 @@
       <div class="hero-flow-sub">CST + cClassTrib<br>+ como usar</div>
     </div>
   </div>
+</div>
+
+<!-- ── Hero stats strip ── -->
+<div class="hero-stats">
+  <span><strong>164</strong> códigos cClassTrib</span>
+  <span class="hero-stat-sep">·</span>
+  <span><strong>18</strong> grupos CST</span>
+  <span class="hero-stat-sep">·</span>
+  <span>Fonte: <a class="hero-stat-link" href="https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria" target="_blank" rel="noopener">SVRS/CGIBS</a></span>
+  <span class="hero-stat-sep">·</span>
+  <span>Obrigatório em <strong>03/08/2026</strong></span>
 </div>
 
 <!-- ── Wizard ── -->
