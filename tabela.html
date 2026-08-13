@@ -775,7 +775,20 @@ document.addEventListener('keydown', e => {
 
 // ── Init ──
 buildSidebar();
-render();
+
+// O guia (index.html) linka para cá como ?cst=NNN para abrir já no grupo
+// do resultado. Um código inexistente cai na tabela completa.
+(function applyUrlFilter() {
+  const cst = new URLSearchParams(location.search).get('cst');
+  if (!cst || !gruposMap[cst]) { render(); return; }
+
+  setFilter(cst); // já chama render()
+
+  const item = document.querySelector(`.nav-item[data-cst="${cst}"]`);
+  if (item) item.scrollIntoView({ block: 'nearest' });
+  const chip = document.querySelector(`.chip[data-cst="${cst}"]`);
+  if (chip) chip.scrollIntoView({ block: 'nearest', inline: 'center' });
+})();
 </script>
 </body>
 </html>

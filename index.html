@@ -1403,11 +1403,11 @@ function renderStep(container, node) {
   container.innerHTML = `
     ${backBtn}
     <div class="step">
-      <div class="step-question">${esc(node.question)}</div>
+      <h2 class="step-question" id="step-question" tabindex="-1">${esc(node.question)}</h2>
       ${node.sub ? `<div class="step-sub">${esc(node.sub)}</div>` : ''}
       <div class="options-grid">
         ${node.options.map(opt => `
-          <button class="option-card" onclick="choose('${esc(opt.next)}', '${esc(opt.label)}')">
+          <button class="option-card" data-next="${esc(opt.next)}" data-label="${esc(opt.label)}">
             <div class="option-icon">${opt.icon}</div>
             <div class="option-label">${esc(opt.label)}</div>
             <div class="option-sub">${esc(opt.sub)}</div>
@@ -1457,7 +1457,7 @@ function renderResult(container, result) {
         <div class="result-icon">${result.icon}</div>
         <div class="result-header-text">
           <div class="result-eyebrow">Regime tributário identificado</div>
-          <div class="result-title">${esc(result.title)}</div>
+          <h2 class="result-title" id="step-question" tabindex="-1">${esc(result.title)}</h2>
           <div class="result-subtitle">${esc(result.subtitle)}</div>
         </div>
       </div>
@@ -1536,11 +1536,43 @@ function updateProgress(step) {
 // ────────────────────────────────────────────────
 //  Navigation
 // ────────────────────────────────────────────────
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Alinha o topo do wizard logo abaixo da navbar fixa.
+// Só sobe quando o wizard já saiu da tela por cima — nunca joga a página
+// inteira de volta ao hero.
+function scrollToWizard() {
+  const wrap = document.querySelector('.wizard-wrap');
+  if (!wrap) return;
+  const nav = document.querySelector('.topnav');
+  const offset = (nav ? nav.offsetHeight : 0) + 12;
+  const target = wrap.getBoundingClientRect().top + window.scrollY - offset;
+  if (window.scrollY <= target) return;
+  window.scrollTo({ top: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+// Delegação: o conteúdo do wizard é reescrito a cada passo, então o
+// listener fica no container que nunca é substituído.
+document.getElementById('wizard-content').addEventListener('click', e => {
+  const card = e.target.closest('.option-card');
+  if (!card) return;
+  choose(card.dataset.next, card.dataset.label);
+});
+
+// Ao trocar de passo o botão clicado deixa de existir e o foco cai no
+// <body>. Devolve o foco ao título para quem navega por teclado ou leitor.
+function focusStep() {
+  const h = document.getElementById('step-question');
+  if (h) h.focus({ preventScroll: true });
+}
+
 function choose(nextId, label) {
   path.push({ nodeId: currentNodeId, label });
   currentNodeId = nextId;
   render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  pushUrlState();
+  scrollToWizard();
+  focusStep();
 }
 
 function goBack() {
@@ -1548,6 +1580,9 @@ function goBack() {
   const prev = path.pop();
   currentNodeId = prev.nodeId;
   render();
+  pushUrlState();
+  scrollToWizard();
+  focusStep();
 }
 
 function goToStep(index) {
@@ -1555,13 +1590,18 @@ function goToStep(index) {
   path = path.slice(0, index);
   currentNodeId = target.nodeId;
   render();
+  pushUrlState();
+  scrollToWizard();
+  focusStep();
 }
 
 function restart() {
   path = [];
   currentNodeId = 'start';
   render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  pushUrlState();
+  scrollToWizard();
+  focusStep();
 }
 
 function copyFirstCode(code) {
@@ -1585,9 +1625,64 @@ function esc(s) {
 }
 
 // ────────────────────────────────────────────────
-//  URL state — read ?cst= param if present
+//  URL state — o caminho percorrido vive em ?p=
+//  Torna o resultado compartilhável por link e faz
+//  o botão "voltar" do navegador andar no wizard.
 // ────────────────────────────────────────────────
+
+// O rótulo de cada passo é derivado da árvore, então a URL
+// só precisa carregar a sequência de nós.
+function labelFor(fromId, toId) {
+  const node = TREE[fromId];
+  if (!node) return '';
+  const opt = node.options.find(o => o.next === toId);
+  return opt ? opt.label : '';
+}
+
+// Aberto via file:// o documento tem origin "null" e pushState com URL
+// lança SecurityError. O projeto é offline-first (abrir o HTML direto do
+// disco é caso de uso suportado), então a URL é um extra: se falhar, o
+// wizard continua funcionando sem histórico.
+const canPushState = location.protocol !== 'file:';
+
+function pushUrlState() {
+  if (!canPushState) return;
+  const ids = path.map(p => p.nodeId).concat(currentNodeId);
+  const url = ids.length > 1 ? `?p=${ids.join(',')}` : location.pathname;
+  try {
+    history.pushState({ p: ids }, '', url);
+  } catch (e) {
+    /* histórico indisponível — navegação segue normal */
+  }
+}
+
+function readUrlState() {
+  const raw = new URLSearchParams(location.search).get('p');
+  path = [];
+  currentNodeId = 'start';
+  if (!raw) return;
+
+  const ids = raw.split(',').filter(Boolean);
+  // Um nó inválido (link velho, URL editada à mão) volta ao início
+  // em vez de renderizar tela em branco.
+  const valid = ids.length > 0 && ids[0] === 'start' &&
+    ids.every(id => TREE[id] || RESULTS[id]);
+  if (!valid) return;
+
+  for (let i = 0; i < ids.length - 1; i++) {
+    path.push({ nodeId: ids[i], label: labelFor(ids[i], ids[i + 1]) });
+  }
+  currentNodeId = ids[ids.length - 1];
+}
+
+window.addEventListener('popstate', () => {
+  readUrlState();
+  render();
+  scrollToWizard();
+});
+
 (function init() {
+  readUrlState();
   render();
 })();
 </script>
