@@ -185,27 +185,6 @@
     :root[data-theme="dark"] .hero-callout { background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.22); color: #FCA5A5; }
     :root[data-theme="dark"] .hero-callout strong { color: #FEE2E2; }
 
-    /* ── Faixa de procedência, base do hero ──
-       Os passos do fluxo NÃO aparecem aqui: a barra de progresso do
-       wizard já os lista e ainda mostra onde você está. */
-    .hero-stats {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--s2);
-      padding: var(--s3) var(--s5);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
-      font-size: var(--t-meta);
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .hero-stats strong { color: var(--text); font-weight: 700; }
-    .hero-stat-sep { color: var(--border); user-select: none; }
-    .hero-stat-link { color: var(--accent); text-decoration: none; }
-    .hero-stat-link:hover { text-decoration: underline; }
-
     /* ── Wizard container ── */
     .wizard-wrap {
       max-width: 720px;
@@ -526,16 +505,12 @@
       .options-grid { grid-template-columns: 1fr 1fr; }
       .wizard-wrap { padding: var(--s4) var(--s4) var(--s7); }
       .hero { padding: var(--s5) var(--s4); }
-      .hero-stats { font-size: var(--t-small); padding: var(--s2) var(--s4); }
       .codes-row { flex-direction: column; }
       .prog-label { display: none; }
       /* Um passo abaixo na escala: --s5 vira --s4 no card de resultado */
       .result-body, .result-header { padding: var(--s4); }
       .result-header { gap: var(--s3); }
       .result-icon { width: 44px; height: 44px; font-size: 26px; }
-    }
-    @media (max-width: 420px) {
-      .hero-stats { display: none; }
     }
     @media (max-width: 400px) {
       .options-grid { grid-template-columns: 1fr; }
@@ -590,14 +565,6 @@
 
 </div>
 
-<!-- ── Hero stats strip ── -->
-<div class="hero-stats">
-  <span><strong>164</strong> códigos cClassTrib</span>
-  <span class="hero-stat-sep">·</span>
-  <span><strong>18</strong> grupos CST</span>
-  <span class="hero-stat-sep">·</span>
-  <span>Fonte: <a class="hero-stat-link" href="https://dfe-portal.svrs.rs.gov.br/DFE/TabelaClassificacaoTributaria" target="_blank" rel="noopener">SVRS/CGIBS</a></span>
-</div>
 
 <!-- ── Wizard ── -->
 <div class="wizard-wrap">
